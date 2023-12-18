@@ -12,5 +12,6 @@ public class Main {
         double[] outputPatterns = {0, 1, 1, 0};
 
         trainer.train(inputPatterns, outputPatterns);
+        //help
     }
 }
