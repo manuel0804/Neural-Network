@@ -7,7 +7,8 @@ import java.util.stream.IntStream;
 public class DiabetesNeuralNetwork {
     private double[][] trainingInputs;
     private double[][] trainingOutputs;
-    private final double learningRate = 0.1;
+    private final double learningRate = 0.01;
+    private final int numEpochs = 10000;
 
     private int numInputs, numHiddenNodes, numOutputs, numTrainingSets;
 
@@ -15,7 +16,7 @@ public class DiabetesNeuralNetwork {
         this.trainingInputs = trainingInputs;
         this.trainingOutputs = trainingOutputs;
         this.numInputs = trainingInputs[0].length;
-        this.numHiddenNodes = trainingInputs[0].length;
+        this.numHiddenNodes = 8; // Adjust the number as needed
         this.numOutputs = trainingOutputs[0].length;
         this.numTrainingSets = trainingInputs.length;
     }
@@ -29,7 +30,7 @@ public class DiabetesNeuralNetwork {
     }
 
     private double sigmoidDerivative(double x){
-        return x * (1 - x);
+        return sigmoid(x) * (1 - sigmoid(x));
     }
 
     private void shuffle(int[] array){
@@ -78,7 +79,7 @@ public class DiabetesNeuralNetwork {
 
         int[] trainingSetOrder = IntStream.range(0, numTrainingSets).toArray();
 
-        int numEpochs = 10000;
+
 
         // Training
         for(int epoch = 0; epoch < numEpochs; epoch++){
@@ -107,8 +108,8 @@ public class DiabetesNeuralNetwork {
                     outputLayer[j] = sigmoid(activation);
                 }
 
-                System.out.printf("Input: %s,   Output: %s,  Expected Output: %s\n",
-                        Arrays.toString(trainingInputs[i]), Arrays.toString(outputLayer), Arrays.toString(trainingOutputs[i]));
+                System.out.printf("Output: %.6f,  Expected Output: %s\n", outputLayer[0], Arrays.toString(trainingOutputs[0]));
+
 
 
                 // Backpropagation
