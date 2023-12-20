@@ -14,4 +14,19 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-core</artifactId>
+            <version>1.0.0-beta7</version> <!-- Überprüfe die neueste Version auf Maven Central -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.9.0</version> <!-- Überprüfe die neueste Version auf Maven Central -->
+        </dependency>
+    </dependencies>
+
+
+
 </project>
