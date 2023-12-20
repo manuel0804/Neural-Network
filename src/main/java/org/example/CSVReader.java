@@ -6,7 +6,7 @@ import java.util.List;
 
 public class CSVReader {
     static List<double[]> dataList = new ArrayList<>();
-    public void loadCSV() {
+    public static void loadCSV() {
         // Pfad zur CSV-Datei
         String csvFilePath = "src/main/resources/diabetes.csv";
 

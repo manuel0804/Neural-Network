@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Beispielaufruf der train-Methode mit zufälligen Daten.
-        CSVReader.loadCSV;
+        CSVReader.loadCSV();
         var list = CSVReader.dataList;
     }
 }
