@@ -5,10 +5,10 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 public class DiabetesNeuralNetwork {
-    private double[][] trainingInputs;
-    private double[][] trainingOutputs;
+    private final double[][] trainingInputs;
+    private final double[][] trainingOutputs;
     private final double learningRate = 0.01;
-    private final int numEpochs = 10000;
+    private final int numEpochs = 1000;
 
     private int numInputs, numHiddenNodes, numOutputs, numTrainingSets;
 
@@ -16,7 +16,7 @@ public class DiabetesNeuralNetwork {
         this.trainingInputs = trainingInputs;
         this.trainingOutputs = trainingOutputs;
         this.numInputs = trainingInputs[0].length;
-        this.numHiddenNodes = 8; // Adjust the number as needed
+        this.numHiddenNodes = 500; // Adjust the number as needed
         this.numOutputs = trainingOutputs[0].length;
         this.numTrainingSets = trainingInputs.length;
     }
@@ -37,13 +37,13 @@ public class DiabetesNeuralNetwork {
         Random rand = new Random();
         int n = array.length;
 
-        if(n > 1){
-            for(int i = 0; i < n-1; i++){
-                int randomIndex = rand.nextInt(n - i);
-                int temp = array[randomIndex];
-                array[randomIndex] = array[i];
-                array[i] = temp;
-            }
+        for (int i = n - 1; i > 0; i--) {
+            int j = rand.nextInt(i + 1);
+
+            // Swap array[i] and array[j]
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
         }
     }
 
@@ -108,7 +108,9 @@ public class DiabetesNeuralNetwork {
                     outputLayer[j] = sigmoid(activation);
                 }
 
-                System.out.printf("Output: %.6f,  Expected Output: %s\n", outputLayer[0], Arrays.toString(trainingOutputs[0]));
+                //prints the input
+                System.out.printf("Input: %s\n", Arrays.toString(trainingInputs[i]));
+                System.out.printf("Output: %.6f,  Expected Output: %d\n\n", outputLayer[0], (int)trainingOutputs[i][0]);
 
 
 
