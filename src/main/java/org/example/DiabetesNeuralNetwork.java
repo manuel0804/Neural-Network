@@ -13,7 +13,7 @@ public class DiabetesNeuralNetwork {
     private int numInputs, numHiddenNodes, numOutputs, numTrainingSets;
 
     public DiabetesNeuralNetwork(double[][] trainingInputs, double[][] trainingOutputs){
-        this.trainingInputs = trainingInputs;
+        this.trainingInputs = normalize(trainingInputs);
         this.trainingOutputs = trainingOutputs;
         this.numInputs = trainingInputs[0].length;
         this.numHiddenNodes = 500; // Adjust the number as needed
@@ -21,8 +21,33 @@ public class DiabetesNeuralNetwork {
         this.numTrainingSets = trainingInputs.length;
     }
 
+    private double[][] normalize(double[][] data) {
+        int numSamples = data.length;
+        int numFeatures = data[0].length;
+
+        for (int j = 0; j < numFeatures; j++) {
+            double min = Double.MAX_VALUE;
+            double max = Double.MIN_VALUE;
+
+            // Find min and max values for the current feature
+            for (int i = 0; i < numSamples; i++) {
+                min = Math.min(min, data[i][j]);
+                max = Math.max(max, data[i][j]);
+            }
+
+            // Scale the feature to the range [0, 1]
+            for (int i = 0; i < numSamples; i++) {
+                data[i][j] = (data[i][j] - min) / (max - min);
+            }
+        }
+
+        return data;
+    }
+
     private double initWeights(){
-        return new Random().nextDouble();
+        Random random = new Random();
+        return -1 + (1 - (-1)) * random.nextDouble();
+
     }
 
     private double sigmoid(double x){
@@ -94,7 +119,7 @@ public class DiabetesNeuralNetwork {
                 for (int j=0; j<numHiddenNodes; j++) {
                     double activation = hiddenLayerBias[j];
                     for (int k=0; k<numInputs; k++) {
-                        activation += trainingInputs[i][k] * hiddenWeights[k][j];
+                        activation += trainingInputs[i][k] * hiddenWeights[k][j];  // maybe change it to hiddenWeights[j][k]
                     }
                     hiddenLayer[j] = sigmoid(activation);
                 }
@@ -103,7 +128,7 @@ public class DiabetesNeuralNetwork {
                 for (int j=0; j<numOutputs; j++) {
                     double activation = outputLayerBias[j];
                     for (int k=0; k<numHiddenNodes; k++) {
-                        activation += hiddenLayer[k] * outputWeights[k][j];
+                        activation += hiddenLayer[k] * outputWeights[k][j];   // maybe change it to outputWeights[j][k]
                     }
                     outputLayer[j] = sigmoid(activation);
                 }
