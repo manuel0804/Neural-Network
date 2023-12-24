@@ -7,8 +7,8 @@ import java.util.stream.IntStream;
 public class DiabetesNeuralNetwork {
     private final double[][] trainingInputs;
     private final double[][] trainingOutputs;
-    private final double learningRate = 0.01;
-    private final int numEpochs = 1000;
+    private final double learningRate = 0.05;
+    private final int numEpochs = 100;
 
     private int numInputs, numHiddenNodes, numOutputs, numTrainingSets;
 
@@ -16,7 +16,7 @@ public class DiabetesNeuralNetwork {
         this.trainingInputs = normalize(trainingInputs);
         this.trainingOutputs = trainingOutputs;
         this.numInputs = trainingInputs[0].length;
-        this.numHiddenNodes = 500; // Adjust the number as needed
+        this.numHiddenNodes = 5; // Adjust the number as needed
         this.numOutputs = trainingOutputs[0].length;
         this.numTrainingSets = trainingInputs.length;
     }
@@ -44,10 +44,9 @@ public class DiabetesNeuralNetwork {
         return data;
     }
 
-    private double initWeights(){
+    public double initWeights(){
         Random random = new Random();
         return -1 + (1 - (-1)) * random.nextDouble();
-
     }
 
     private double sigmoid(double x){
@@ -82,6 +81,7 @@ public class DiabetesNeuralNetwork {
 
         double[][] hiddenWeights = new double[numInputs][numHiddenNodes];
         double[][] outputWeights = new double[numHiddenNodes][numOutputs];
+        //both of them are build like a matrix first col is first vector
 
         // Initialize weights
         for(int i = 0; i < numInputs; i++){
@@ -100,6 +100,10 @@ public class DiabetesNeuralNetwork {
         for(int i = 0; i < numHiddenNodes; i++){
             hiddenLayerBias[i] = initWeights();
         }
+        //Initialize output bias
+        for(int i = 0; i < numOutputs; i++){
+            outputLayerBias[i] = initWeights();
+        }
 
 
         int[] trainingSetOrder = IntStream.range(0, numTrainingSets).toArray();
@@ -108,42 +112,51 @@ public class DiabetesNeuralNetwork {
 
         // Training
         for(int epoch = 0; epoch < numEpochs; epoch++){
+            int correctClassified = 0;
 
             shuffle(trainingSetOrder);
 
             for(int x = 0; x < numTrainingSets; x++){
 
-                int i = trainingSetOrder[x];
+                int currentSet = trainingSetOrder[x];
 
                 // Forward pass
-                for (int j=0; j<numHiddenNodes; j++) {
-                    double activation = hiddenLayerBias[j];
-                    for (int k=0; k<numInputs; k++) {
-                        activation += trainingInputs[i][k] * hiddenWeights[k][j];  // maybe change it to hiddenWeights[j][k]
+                //input -> hidden
+                for(int i = 0; i < numHiddenNodes; i++){
+                    double scalarSum = 0;
+                    for(int j = 0; j < numInputs; j++){
+                        scalarSum += trainingInputs[currentSet][j] * hiddenWeights[j][i];
                     }
-                    hiddenLayer[j] = sigmoid(activation);
+                    hiddenLayer[i] = scalarSum + hiddenLayerBias[i] ;
                 }
 
-
-                for (int j=0; j<numOutputs; j++) {
-                    double activation = outputLayerBias[j];
-                    for (int k=0; k<numHiddenNodes; k++) {
-                        activation += hiddenLayer[k] * outputWeights[k][j];   // maybe change it to outputWeights[j][k]
+                //hidden -> output
+                for(int i = 0; i < numOutputs; i++){
+                    double scalarSum = 0;
+                    for(int j = 0; j < numHiddenNodes; j++){
+                        scalarSum += sigmoid(hiddenLayer[j]) * outputWeights[j][i];
                     }
-                    outputLayer[j] = sigmoid(activation);
+                    outputLayer[i] = scalarSum + outputLayerBias[i];
                 }
 
                 //prints the input
-                System.out.printf("Input: %s\n", Arrays.toString(trainingInputs[i]));
-                System.out.printf("Output: %.6f,  Expected Output: %d\n\n", outputLayer[0], (int)trainingOutputs[i][0]);
+                System.out.printf("Input: %s\n", Arrays.toString(trainingInputs[currentSet]));
+                System.out.printf("Actual Output: %.6f,  Expected Output: %d\n\n", sigmoid(outputLayer[0]), (int)trainingOutputs[currentSet][0]);
+                if(sigmoid(outputLayer[0]) >= 0.5 && trainingOutputs[currentSet][0] == 1) correctClassified++;
+                if(sigmoid(outputLayer[0]) < 0.5 && trainingOutputs[currentSet][0] == 0) correctClassified++;
 
 
 
-                // Backpropagation
+
+                // Delta output calculation
+                double[] out = new double[numOutputs];
+                for(int j = 0; j < numOutputs; j++){
+                    out[j] = sigmoid(outputLayer[j]);
+                }
+
                 double[] deltaOutput = new double[numOutputs];
-                for (int j=0; j<numOutputs; j++) {
-                    double errorOutput = (trainingOutputs[i][j] - outputLayer[j]);
-                    deltaOutput[j] = errorOutput * sigmoidDerivative(outputLayer[j]);
+                for(int j = 0; j < numOutputs; j++){
+                    deltaOutput[j] = sigmoidDerivative(outputLayer[j]) * (trainingOutputs[currentSet][j] - out[j]);
                 }
 
                 double[] deltaHidden = new double[numHiddenNodes];
@@ -166,10 +179,11 @@ public class DiabetesNeuralNetwork {
                 for (int j=0; j<numHiddenNodes; j++) {
                     hiddenLayerBias[j] += deltaHidden[j] * learningRate;
                     for(int k=0; k<numInputs; k++) {
-                        hiddenWeights[k][j] += trainingInputs[i][k] * deltaHidden[j] * learningRate;
+                        hiddenWeights[k][j] += trainingInputs[currentSet][k] * deltaHidden[j] * learningRate;
                     }
                 }
             }
+            System.out.println("Epoch: " + epoch + " Accuracy: " + (double)correctClassified/numTrainingSets * 100 + "%");
         }
     }
 }
