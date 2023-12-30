@@ -1,15 +1,18 @@
 package org.example;
 
 import org.example.NeuralNetwork.Network;
+import org.example.gui.Renderer;
 import org.example.sets.TrainingSet;
 import org.example.utils.CSVReader;
 import org.example.utils.Util;
+
+import java.util.Arrays;
 
 
 public class Application {
 
     public static void main(String[] args) {
-        Network net = new Network(4,1,3,4);
+/*        Network net = new Network(4,1,3,4);
 
         double[] input = new double[]{0.1,0.5,0.2,0.9};
         double[] expectedOutput = new double[]{1,1,0,0};
@@ -22,7 +25,7 @@ public class Application {
         double[] result = net.forward(input);
         System.out.printf("Result: %.4f, %.4f, %.4f, %.4f\n\n", result[0], result[1], result[2], result[3]);
 
-/*        Network net2 = new Network(4,3,3,2);
+        Network net2 = new Network(4,3,3,2);
 
         TrainingSet ts = new TrainingSet(4,2);
         ts.addData(new double[]{0.1,0.2,0.3,0.4}, new double[]{0.9,0.1});
@@ -56,6 +59,8 @@ public class Application {
         long endTime = System.currentTimeMillis();
         long timeElapsed = endTime - startTime;
         System.out.printf("\nExecution time in milliseconds: %d\n", timeElapsed);
+
+        Renderer r = new Renderer(net3);
 
     }
 }

@@ -27,7 +27,7 @@ public class Network {
     private final double[][] output;
 
     /** The weights connecting neurons in adjacent layers. */
-    private final double[][][] weights;
+    public final double[][][] weights;
 
     /** The biases for each neuron in each layer. */
     private final double[][] bias;
@@ -97,6 +97,7 @@ public class Network {
         backpropagationError(expectedOutput);
         updateWeights(learningRate);
         System.out.printf("Actual Result: %.4f\tExpected Result %s\n", output[NETWORK_SIZE - 1][0], expectedOutput[0] == 1 ? "Diabetes" : "No Diabetes");
+        //sout really slows it down
     }
 
     /**
