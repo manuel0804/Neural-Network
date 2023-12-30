@@ -5,7 +5,6 @@ import org.example.sets.TrainingSet;
 import org.example.utils.CSVReader;
 import org.example.utils.Util;
 
-import java.util.Arrays;
 
 public class Application {
 
