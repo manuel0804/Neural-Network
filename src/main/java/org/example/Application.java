@@ -50,6 +50,9 @@ public class Application {
         Network net3 = new Network(8,6,4,1);
         TrainingSet ts = new TrainingSet(8,1);
 
+        Renderer r = new Renderer(net3);
+        r.redirectSystemOut();
+
         for(int i = 0; i < inputData.length; i++){
             ts.addData(normalizedInput[i], outputData[i]);
         }
@@ -60,8 +63,9 @@ public class Application {
         long timeElapsed = endTime - startTime;
         System.out.printf("\nExecution time in milliseconds: %d\n", timeElapsed);
 
-        Renderer r = new Renderer(net3);
+        r.render();
 
 
+        
     }
 }
