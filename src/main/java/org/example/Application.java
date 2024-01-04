@@ -6,8 +6,6 @@ import org.example.sets.TrainingSet;
 import org.example.utils.CSVReader;
 import org.example.utils.Util;
 
-import java.util.Arrays;
-
 
 public class Application {
 
@@ -61,11 +59,14 @@ public class Application {
 
         long endTime = System.currentTimeMillis();
         long timeElapsed = endTime - startTime;
+
+        System.out.println("Training Set Results of Neural Network:");
+        for(int i = 0; i < ts.size(); i++){
+            System.out.printf("Expected Result: %.4f,\tActual Result: %d\n", net3.forward(ts.getInput(i))[0], (int)ts.getOutput(i)[0]);
+        }
+
         System.out.printf("\nExecution time in milliseconds: %d\n", timeElapsed);
 
         r.render();
-
-
-        
     }
 }

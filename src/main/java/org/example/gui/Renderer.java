@@ -4,7 +4,6 @@ import org.example.NeuralNetwork.Network;
 import org.example.utils.CustomOutputStream;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.PrintStream;
 
 public class Renderer extends JFrame {

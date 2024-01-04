@@ -1,11 +1,9 @@
 package org.example.NeuralNetwork;
 
 
-import org.example.gui.Renderer;
 import org.example.sets.TrainingSet;
 import org.example.utils.Util;
 
-import javax.swing.*;
 import java.util.Collections;
 
 /**
@@ -139,8 +137,6 @@ public class Network {
         forward(input);
         backpropagationError(expectedOutput);
         updateWeights(learningRate);
-//        System.out.printf("Actual Result: %.4f\tExpected Result: %s\n", output[NETWORK_SIZE - 1][0], expectedOutput[0] == 1 ? "Diabetes" : "No Diabetes");
-        //sout really slows it down
     }
 
     /**

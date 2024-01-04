@@ -2,7 +2,6 @@ package org.example.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.OutputStream;
 
 class ConsoleOutputPanel extends JPanel {
 
