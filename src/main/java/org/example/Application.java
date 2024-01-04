@@ -48,7 +48,7 @@ public class Application {
         Network net3 = new Network(8,6,4,1);
         TrainingSet ts = new TrainingSet(8,1);
 
-        Renderer r = new Renderer(net3);
+        Renderer r = new Renderer();
         r.redirectSystemOut();
 
         for(int i = 0; i < inputData.length; i++){
@@ -67,6 +67,6 @@ public class Application {
 
         System.out.printf("\nExecution time in milliseconds: %d\n", timeElapsed);
 
-        r.render();
+        r.render(net3);
     }
 }

@@ -7,14 +7,11 @@ import javax.swing.*;
 import java.io.PrintStream;
 
 public class Renderer extends JFrame {
-
-    private final Network network;
     private final JTabbedPane tabbedPane;
     private NeuralNetworkPanel neuralNetworkPanel;
     private final ConsoleOutputPanel consoleOutputPanel;
 
-    public Renderer(Network network) {
-        this.network = network;
+    public Renderer() {
 
         setTitle("Neural Network Visualization");
         setSize(800, 600);
@@ -35,7 +32,7 @@ public class Renderer extends JFrame {
         System.setErr(printStream);
     }
 
-    public void render(){
+    public void render(Network network){
 
         neuralNetworkPanel = new NeuralNetworkPanel(network);
 
