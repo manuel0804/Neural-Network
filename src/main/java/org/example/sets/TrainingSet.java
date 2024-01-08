@@ -68,4 +68,8 @@ public class TrainingSet {
     public double[] getOutput(int index){
         return data.get(index)[1];
     }
+
+    public ArrayList<double[][]> getData() {
+        return data;
+    }
 }

@@ -4,6 +4,8 @@ package org.example.NeuralNetwork;
 import org.example.sets.TrainingSet;
 import org.example.utils.Util;
 
+import java.util.Collections;
+
 /**
  * Network represents a feedforward neural network with the specified layer sizes.
  * It includes methods for training, forward propagation, backpropagation error calculation,
@@ -27,7 +29,7 @@ public class Network {
     private final double[][] output;
 
     /** The weights connecting neurons in adjacent layers. */
-    private final double[][][] weights;
+    public final double[][][] weights;
 
     /** The biases for each neuron in each layer. */
     private final double[][] bias;
@@ -60,10 +62,9 @@ public class Network {
             this.errorSignal[i] = new double[NETWORK_LAYER_SIZES[i]];
             this.outputDerivative[i] = new double[NETWORK_LAYER_SIZES[i]];
 
-            this.bias[i] = Util.createRandomArray(NETWORK_LAYER_SIZES[i], 0.3, 0.7);
-
+            this.bias[i] = Util.createRandomArray(NETWORK_LAYER_SIZES[i], 1, 1);
             if (i > 0) {
-                weights[i] = Util.createRandomArray(NETWORK_LAYER_SIZES[i], NETWORK_LAYER_SIZES[i - 1], -0.3, 0.5);
+                weights[i] = Util.createRandomArray(NETWORK_LAYER_SIZES[i], NETWORK_LAYER_SIZES[i - 1], -1, 1);
             }
         }
     }
@@ -72,15 +73,55 @@ public class Network {
      * Trains the neural network using the provided training set and specified number of loops.
      *
      * @param set The training set.
-     * @param loops The number of training loops.
+     * @param epochs The number of training loops.
      */
-    public void train(TrainingSet set, int loops) {
+    public void train(TrainingSet set, int epochs) {
         if (set.INPUT_SIZE != INPUT_SIZE || set.OUTPUT_SIZE != OUTPUT_SIZE) return;
-        for (int i = 0; i < loops; i++) {
+        Collections.shuffle(set.getData());
+        for (int epoch = 0; epoch < epochs; epoch++) {
+            // Shuffle the training set at the beginning of each epoch
+            Collections.shuffle(set.getData());
+
+            double totalError = 0;
+            int totalFalsePositives = 0;
+            double totalLoss = 0;
+
             for (int t = 0; t < set.size(); t++) {
-                this.train(set.getInput(t), set.getOutput(t), Util.LEARNING_RATE);
+                double[] input = set.getInput(t);
+                double[] expectedOutput = set.getOutput(t);
+
+                // Forward pass
+                double[] tempOutput = forward(input);
+
+                // Backpropagation
+                backpropagationError(expectedOutput);
+
+                // Update weights
+                updateWeights(Util.LEARNING_RATE);
+
+                // Calculate metrics for this training example
+                double error = Util.calculateError(tempOutput, expectedOutput);
+                int falsePositives = Util.calculateFalsePositives(tempOutput, expectedOutput);
+                double loss = Util.calculateLoss(tempOutput, expectedOutput);
+
+                // Accumulate metrics for the entire epoch
+                totalError += error;
+                totalFalsePositives += falsePositives;
+                totalLoss += loss;
             }
+
+            // Calculate average metrics for the epoch
+            double averageError = totalError / set.size();
+            double averageFalsePositives = (double) totalFalsePositives / set.size();
+            double averageLoss = totalLoss / set.size();
+
+            // Print or store the metrics for the epoch
+            System.out.println("\nEpoch " + epoch + ":");
+            System.out.println("Average Error: " + averageError);
+            System.out.println("Average False Positives: " + averageFalsePositives);
+            System.out.println("Average Loss: " + averageLoss);
         }
+
     }
 
     /**
@@ -96,7 +137,6 @@ public class Network {
         forward(input);
         backpropagationError(expectedOutput);
         updateWeights(learningRate);
-        System.out.printf("Actual Result: %.4f\tExpected Result %s\n", output[NETWORK_SIZE - 1][0], expectedOutput[0] == 1 ? "Diabetes" : "No Diabetes");
     }
 
     /**

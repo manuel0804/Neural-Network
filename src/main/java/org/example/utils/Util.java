@@ -104,4 +104,55 @@ public class Util {
     public static double randomValue(double lowerBound, double upperBound){
         return Math.random() * (upperBound - lowerBound) + lowerBound;
     }
+
+    /**
+     * Calculates the error between the predicted output and the expected output.
+     *
+     * @param output The predicted output.
+     * @param expectedOutput The expected output.
+     * @return The error.
+     */
+    public static double calculateError(double[] output, double[] expectedOutput) {
+        double error = 0;
+        for (int i = 0; i < output.length; i++) {
+            error += Math.abs(output[i] - expectedOutput[i]);
+        }
+        return error / output.length;
+    }
+
+    /**
+     * Calculates the number of false positives.
+     *
+     * @param output The predicted output.
+     * @param expectedOutput The expected output.
+     * @return The number of false positives.
+     */
+    public static int calculateFalsePositives(double[] output, double[] expectedOutput) {
+        int falsePositives = 0;
+        for (int i = 0; i < output.length; i++) {
+            if (output[i] > 0.5 && expectedOutput[i] == 0) {
+                falsePositives++;
+            }
+            if(output[i] < 0.5 && expectedOutput[i] == 1){
+                falsePositives++;
+            }
+        }
+        return falsePositives;
+    }
+
+    /**
+     * Calculates the loss using a specific loss function (e.g., mean squared error).
+     *
+     * @param output The predicted output.
+     * @param expectedOutput The expected output.
+     * @return The loss.
+     */
+    public static double calculateLoss(double[] output, double[] expectedOutput) {
+        // Mean Squared Error
+        double loss = 0;
+        for (int i = 0; i < output.length; i++) {
+            loss += Math.pow(output[i] - expectedOutput[i], 2);
+        }
+        return loss / output.length;
+    }
 }
