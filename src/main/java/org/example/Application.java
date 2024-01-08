@@ -6,10 +6,14 @@ import org.example.sets.TrainingSet;
 import org.example.utils.CSVReader;
 import org.example.utils.Util;
 
+import java.util.Arrays;
+
 
 public class Application {
 
     public static void main(String[] args) {
+
+        //very Simple Neural Network to test if it works
 /*        Network net = new Network(4,1,3,4);
 
         double[] input = new double[]{0.1,0.5,0.2,0.9};
@@ -21,9 +25,10 @@ public class Application {
         }
 
         double[] result = net.forward(input);
-        System.out.printf("Result: %.4f, %.4f, %.4f, %.4f\n\n", result[0], result[1], result[2], result[3]);
+        System.out.printf("Result: %.4f, %.4f, %.4f, %.4f\n\n", result[0], result[1], result[2], result[3]);*/
 
-        Network net2 = new Network(4,3,3,2);
+        //Simple Neural Network to test if it works with the TrainingSet
+/*        Network net2 = new Network(4,3,3,2);
 
         TrainingSet ts = new TrainingSet(4,2);
         ts.addData(new double[]{0.1,0.2,0.3,0.4}, new double[]{0.9,0.1});
@@ -34,8 +39,10 @@ public class Application {
         net2.train(ts, 10000);
 
         for(int i = 0; i < ts.size(); i++){
+            //Because of the randomization of the TrainingSet the results will be different every time
             System.out.println(Arrays.toString(net2.forward(ts.getInput(i))));
         }*/
+
         //stat Timer
         long startTime = System.currentTimeMillis();
 

@@ -118,7 +118,7 @@ public class Network {
             // Print or store the metrics for the epoch
             System.out.println("\nEpoch " + epoch + ":");
             System.out.println("Average Error: " + averageError);
-            System.out.println("Total False Positives: " + averageFalsePositives);
+            System.out.println("Average False Positives: " + averageFalsePositives);
             System.out.println("Average Loss: " + averageLoss);
         }
 
