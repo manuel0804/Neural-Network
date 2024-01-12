@@ -145,7 +145,7 @@ public class Network {
      * @param input The input data array.
      * @return The output values of the last layer.
      */
-    public double[] forward(double... input) {
+    public double[] forward(double[] input) {
         if (input.length != this.INPUT_SIZE) return null;
         this.output[0] = input;
         for (int layer = 1; layer < NETWORK_SIZE; layer++) {
