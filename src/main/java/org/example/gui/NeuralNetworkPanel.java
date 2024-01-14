@@ -1,20 +1,36 @@
 package org.example.gui;
 
-
-
 import org.example.NeuralNetwork.Network;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A JPanel that visually represents a neural network and updates the connection colors based on weights.
+ */
 public class NeuralNetworkPanel extends JPanel {
 
     private final Network network;
     private double[][][] weights;  // Store weights
 
+    /**
+     * Constructs a NeuralNetworkPanel with a reference to the neural network.
+     *
+     * @param network The neural network to visualize.
+     */
     public NeuralNetworkPanel(Network network) {
         this.network = network;
         this.weights = network.weights;  // Initialize weights
+    }
+
+    /**
+     * Updates the connection colors based on the provided weights and triggers a repaint.
+     *
+     * @param weights The updated weights.
+     */
+    public void updateWeightColor(double[][][] weights) {
+        this.weights = weights;  // Update weights
+        repaint();  // This will trigger the paintComponent method
     }
 
     @Override
@@ -24,11 +40,11 @@ public class NeuralNetworkPanel extends JPanel {
         drawNeuralNetwork(g);
     }
 
-    public void updateWeightColor(double[][][] weights) {
-        this.weights = weights;  // Update weights
-        repaint();  // This will trigger the paintComponent method
-    }
-
+    /**
+     * Draws the neural network and connection lines based on the weights.
+     *
+     * @param g The Graphics object used for drawing.
+     */
     private void drawNeuralNetwork(Graphics g) {
         int[] layerSizes = network.NETWORK_LAYER_SIZES;
 
